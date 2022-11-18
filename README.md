@@ -12,6 +12,10 @@ def deps do
     {:mixpanel_client_ex, "~> 1.0.0"}
   ]
 end
+
+config :mixpanel_client_ex,
+    token: "***-your-token",
+    active: true
 ```
 
 ## Basic Usage

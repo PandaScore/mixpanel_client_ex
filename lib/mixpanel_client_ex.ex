@@ -1,9 +1,6 @@
 defmodule MixpanelClientEx do
-  use Tesla
-  plug Tesla.Middleware.Headers, [{"content-type", "application/json"}]
-  plug Tesla.Middleware.JSON
-  plug Tesla.Middleware.BaseUrl, "https://api.mixpanel.com"
-
+  alias MixpanelClientEx.RawClient
+  
   defp random_string(size) do
     1..size |> Enum.map(fn(_) -> Enum.random(?a..?z) end) |> to_string()
   end
@@ -12,37 +9,37 @@ defmodule MixpanelClientEx do
     Application.get_env(:mixpanel_client_ex, :token)
   end
 
-  defp raw_track event, properties do
-    post(
-      "/track",
-      [
-        %{
-          "event" => event,
-          "properties" => properties
-        }
-      ]
-    )
+  defp async_if_active callback do
+    if Application.get_env(:mixpanel_client_ex, :active) != true do
+      Task.async(fn -> :ok end)
+    else
+      Task.async(callback)
+    end
   end
+  
 
-  defp raw_engage_set token, distinct_id, set do
-    post(
-      "/engage#profile-set",
-      [
-        %{
-          "$token" => token,
-          "$distinct_id" => distinct_id,
-          "$set" => set,
-          "$ignore_time" => "true",
-          "$ip" => "0"
-        }
-      ]
-    )
-  end
+  @doc """
+  Asynchronously track an Event
 
+  ## Parameters
+
+    - event: String that represents the name of the tracked event.
+    - distinct_id: String that represents the id of the tracked user.
+    - properties: Map containing all metadata you want to associate to the event
+
+  ## Examples
+
+      MixpanelClientEx.track("User logged in", "user-42")
+      MixpanelClientEx.track("User logged in", "user-42", %{"source" => "mobile_app"})
+      MixpanelClientEx.track("User logged in", "user-42", %{"source" => "mobile_app", "time" => 1640991600})
+
+  """
+  @spec track(String.t(), String.t()) :: Task.t()
   def track event, distinct_id do
     track event, distinct_id, %{}
   end
 
+  @spec track(String.t(), String.t(), map()) :: Task.t()
   def track event, distinct_id, properties do
     full_properties = Map.merge(
       %{
@@ -53,10 +50,24 @@ defmodule MixpanelClientEx do
       },
       properties
     )
-    Task.async(fn -> raw_track(event, full_properties) end)
+    async_if_active(fn -> RawClient.track(event, full_properties) end)
   end
 
+  @doc """
+  Set properties on a profile
+
+  ## Parameters
+
+    - distinct_id: String that represents the id of the profile.
+    - properties: Map containing all metadata you want to associate to the profile
+
+  ## Examples
+
+      MixpanelClientEx.engage("user-42", %{"$email" => "john@doe.com"})
+
+  """
+  @spec engage(String.t(), map()) :: Task.t()
   def engage distinct_id, properties do
-    Task.async(fn -> raw_engage_set(token(), distinct_id, properties) end)
+    async_if_active(fn -> RawClient.engage_set(token(), distinct_id, properties) end)
   end
 end

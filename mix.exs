@@ -14,7 +14,7 @@ defmodule MixpanelClientEx.MixProject do
       },
       source_url: "https://github.com/NicolasMarlier/mixpanel_client_ex",
       homepage_url: "https://github.com/NicolasMarlier/mixpanel_client_ex",
-      version: "1.0.0",
+      version: "1.0.1",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
