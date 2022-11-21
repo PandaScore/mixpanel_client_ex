@@ -9,17 +9,13 @@ defmodule MixpanelClientEx do
     Application.get_env(:mixpanel_client_ex, :token)
   end
 
-  defp async_if_active callback do
-    if Application.get_env(:mixpanel_client_ex, :active) != true do
-      Task.async(fn -> :ok end)
-    else
-      Task.async(callback)
-    end
+  defp is_active do
+    Application.get_env(:mixpanel_client_ex, :active) == true
   end
   
 
   @doc """
-  Asynchronously track an Event
+  Track an Event
 
   ## Parameters
 
@@ -50,7 +46,11 @@ defmodule MixpanelClientEx do
       },
       properties
     )
-    async_if_active(fn -> RawClient.track(event, full_properties) end)
+    if is_active() do
+      RawClient.track(event, full_properties)
+    else
+      {:ok, "Skipped as active"}
+    end
   end
 
   @doc """
@@ -68,6 +68,10 @@ defmodule MixpanelClientEx do
   """
   @spec engage(String.t(), map()) :: Task.t()
   def engage distinct_id, properties do
-    async_if_active(fn -> RawClient.engage_set(token(), distinct_id, properties) end)
+    if is_active() do
+      RawClient.engage_set(token(), distinct_id, properties)
+    else
+      {:ok, "Skipped as active"}
+    end
   end
 end

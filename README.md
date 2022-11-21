@@ -1,5 +1,5 @@
 # MixpanelClientEx
-This is a basic, asynchronous implementation on Mixpanel ingestion API (https://developer.mixpanel.com/reference/ingestion-api), allowing you to track events and set profile properties from an Elixir app.
+This is a basic implementation on Mixpanel ingestion API (https://developer.mixpanel.com/reference/ingestion-api), allowing you to track events and set profile properties from an Elixir app.
 
 ## Reference
 See [on hexdocs](https://hexdocs.pm/mixpanel_client_ex)

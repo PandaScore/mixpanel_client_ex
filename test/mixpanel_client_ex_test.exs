@@ -21,9 +21,7 @@ defmodule MixpanelClientExTest do
         end
       )
     
-
     r = MixpanelClientEx.track("User Logged In", "user-42")
-      |> Task.await()
     assert match?({:ok, _}, r)
   end
 
@@ -43,7 +41,6 @@ defmodule MixpanelClientExTest do
       )
 
     r = MixpanelClientEx.track("User Logged In", "user-42", %{"utm_source" => "mobile_app"})
-      |> Task.await()
     assert match?({:ok, _}, r)
   end
 
@@ -68,7 +65,6 @@ defmodule MixpanelClientExTest do
       "time" => 1640991600,
       "$insert_id" => "my-own-insert-id"
       })
-      |> Task.await()
     assert match?({:ok, _}, r)
   end
 
@@ -84,7 +80,6 @@ defmodule MixpanelClientExTest do
     )
     
     r = MixpanelClientEx.track("User Logged In", "user-42")
-      |> Task.await()
     assert match?({:error, _}, r)
   end
 
@@ -108,7 +103,6 @@ defmodule MixpanelClientExTest do
     
 
     r = MixpanelClientEx.engage("user-42", %{"$email" => "james@doe.com" })
-      |> Task.await()
     assert match?({:ok, _}, r)
   end
 
@@ -123,7 +117,6 @@ defmodule MixpanelClientExTest do
     
 
     r = MixpanelClientEx.engage("user-42", %{"$email" => "james@doe.com" })
-      |> Task.await()
     assert match?({:error, _}, r)
   end
   
