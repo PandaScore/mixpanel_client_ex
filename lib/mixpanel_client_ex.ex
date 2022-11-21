@@ -49,7 +49,7 @@ defmodule MixpanelClientEx do
     if is_active() do
       RawClient.track(event, full_properties)
     else
-      {:ok, "Skipped as active"}
+      {:ok, "Skipped as :mixpanel_client_ex, :active config is not set to true"}
     end
   end
 
@@ -71,7 +71,7 @@ defmodule MixpanelClientEx do
     if is_active() do
       RawClient.engage_set(token(), distinct_id, properties)
     else
-      {:ok, "Skipped as active"}
+      {:ok, "Skipped as :mixpanel_client_ex, :active config is not set to true"}
     end
   end
 end
