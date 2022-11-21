@@ -9,7 +9,7 @@ See [on hexdocs](https://hexdocs.pm/mixpanel_client_ex)
 ```elixir
 def deps do
   [
-    {:mixpanel_client_ex, "~> 1.0.0"}
+    {:mixpanel_client_ex, "~> 1.1.0"}
   ]
 end
 
