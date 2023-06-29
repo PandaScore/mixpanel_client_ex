@@ -9,12 +9,12 @@ defmodule MixpanelClientEx.MixProject do
       package: %{
         licenses: ["MIT"],
         links: %{
-          github: "https://github.com/NicolasMarlier/mixpanel_client_ex"
+          github: "https://github.com/PandaScore/mixpanel_client_ex"
         }
       },
-      source_url: "https://github.com/NicolasMarlier/mixpanel_client_ex",
-      homepage_url: "https://github.com/NicolasMarlier/mixpanel_client_ex",
-      version: "1.1.1",
+      source_url: "https://github.com/PandaScore/mixpanel_client_ex",
+      homepage_url: "https://github.com/PandaScore/mixpanel_client_ex",
+      version: "1.1.2",
       elixir: "~> 1.13",
       start_permanent: Mix.env() == :prod,
       deps: deps()
